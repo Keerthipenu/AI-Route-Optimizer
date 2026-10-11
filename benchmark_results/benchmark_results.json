@@ -1,0 +1,266 @@
+{
+  "generated_at": "2026-10-11T14:37:32.075668+00:00",
+  "parameters": {
+    "iterations": 3000,
+    "seeds": [
+      11,
+      22,
+      33,
+      44,
+      55
+    ]
+  },
+  "datasets": {
+    "Small \u00b7 Bengaluru (6 stops)": {
+      "locations": 6,
+      "comparison": [
+        {
+          "Algorithm": "Nearest Neighbor",
+          "Distance (km)": 25.357219396200502,
+          "Objective": "distance_km",
+          "Objective score": 25.357219396200502,
+          "Runtime (ms)": 0.03539957106113434,
+          "Improvement vs NN (%)": 0.0,
+          "Optimality gap (%)": 1.7413428925185246,
+          "Work": 16,
+          "Work metric": "distance comparisons"
+        },
+        {
+          "Algorithm": "2-opt",
+          "Distance (km)": 24.923220664571282,
+          "Objective": "distance_km",
+          "Objective score": 24.923220664571282,
+          "Runtime (ms)": 0.06590038537979126,
+          "Improvement vs NN (%)": 1.7115391275679466,
+          "Optimality gap (%)": 0.0,
+          "Work": 20,
+          "Work metric": "candidate reversals"
+        },
+        {
+          "Algorithm": "Simulated Annealing",
+          "Distance (km)": 24.923220664571282,
+          "Objective": "distance_km",
+          "Objective score": 24.923220664571282,
+          "Runtime (ms)": 13.565999921411276,
+          "Improvement vs NN (%)": 1.7115391275679466,
+          "Optimality gap (%)": 0.0,
+          "Work": 3000,
+          "Work metric": "neighbor proposals"
+        },
+        {
+          "Algorithm": "Brute Force",
+          "Distance (km)": 24.923220664571282,
+          "Objective": "distance_km",
+          "Objective score": 24.923220664571282,
+          "Runtime (ms)": 0.225200317800045,
+          "Improvement vs NN (%)": 1.7115391275679466,
+          "Optimality gap (%)": 0.0,
+          "Work": 120,
+          "Work metric": "permutations evaluated"
+        }
+      ],
+      "annealing_runs": [
+        {
+          "seed": 11,
+          "distance_km": 24.923220664571282,
+          "objective_score": 24.923220664571282,
+          "runtime_ms": 10.355500038713217
+        },
+        {
+          "seed": 22,
+          "distance_km": 24.923220664571282,
+          "objective_score": 24.923220664571282,
+          "runtime_ms": 9.243500418961048
+        },
+        {
+          "seed": 33,
+          "distance_km": 24.923220664571282,
+          "objective_score": 24.923220664571282,
+          "runtime_ms": 11.09160017222166
+        },
+        {
+          "seed": 44,
+          "distance_km": 24.923220664571282,
+          "objective_score": 24.923220664571282,
+          "runtime_ms": 10.22050017490983
+        },
+        {
+          "seed": 55,
+          "distance_km": 24.923220664571282,
+          "objective_score": 24.923220664571282,
+          "runtime_ms": 11.445100419223309
+        }
+      ],
+      "environment": {
+        "generated_at": "2026-10-11T14:37:32.099191+00:00",
+        "python": "3.12.10",
+        "platform": "Windows-11-10.0.26200-SP0",
+        "seed": 11,
+        "sa_iterations": 3000,
+        "brute_force_limit": 8,
+        "exact_optimum_available": true,
+        "objective": "distance_km"
+      }
+    },
+    "Medium \u00b7 Bengaluru (12 stops)": {
+      "locations": 13,
+      "comparison": [
+        {
+          "Algorithm": "Nearest Neighbor",
+          "Distance (km)": 97.6202911872803,
+          "Objective": "distance_km",
+          "Objective score": 97.6202911872803,
+          "Runtime (ms)": 0.04239985719323158,
+          "Improvement vs NN (%)": 0.0,
+          "Optimality gap (%)": null,
+          "Work": 79,
+          "Work metric": "distance comparisons"
+        },
+        {
+          "Algorithm": "2-opt",
+          "Distance (km)": 77.43835391284071,
+          "Objective": "distance_km",
+          "Objective score": 77.43835391284071,
+          "Runtime (ms)": 0.6451001390814781,
+          "Improvement vs NN (%)": 20.673916282139967,
+          "Optimality gap (%)": null,
+          "Work": 264,
+          "Work metric": "candidate reversals"
+        },
+        {
+          "Algorithm": "Simulated Annealing",
+          "Distance (km)": 77.43835391284071,
+          "Objective": "distance_km",
+          "Objective score": 77.43835391284071,
+          "Runtime (ms)": 14.162600040435791,
+          "Improvement vs NN (%)": 20.673916282139967,
+          "Optimality gap (%)": null,
+          "Work": 3000,
+          "Work metric": "neighbor proposals"
+        }
+      ],
+      "annealing_runs": [
+        {
+          "seed": 11,
+          "distance_km": 77.43835391284071,
+          "objective_score": 77.43835391284071,
+          "runtime_ms": 13.838099781423807
+        },
+        {
+          "seed": 22,
+          "distance_km": 77.43835391284071,
+          "objective_score": 77.43835391284071,
+          "runtime_ms": 14.544599689543247
+        },
+        {
+          "seed": 33,
+          "distance_km": 77.43835391284071,
+          "objective_score": 77.43835391284071,
+          "runtime_ms": 14.984200242906809
+        },
+        {
+          "seed": 44,
+          "distance_km": 78.60775410432147,
+          "objective_score": 78.60775410432147,
+          "runtime_ms": 16.49780012667179
+        },
+        {
+          "seed": 55,
+          "distance_km": 77.43835391284071,
+          "objective_score": 77.43835391284071,
+          "runtime_ms": 14.814899768680334
+        }
+      ],
+      "environment": {
+        "generated_at": "2026-10-11T14:37:32.779969+00:00",
+        "python": "3.12.10",
+        "platform": "Windows-11-10.0.26200-SP0",
+        "seed": 11,
+        "sa_iterations": 3000,
+        "brute_force_limit": 8,
+        "exact_optimum_available": false,
+        "objective": "distance_km"
+      }
+    },
+    "Large \u00b7 Bengaluru (24 stops)": {
+      "locations": 25,
+      "comparison": [
+        {
+          "Algorithm": "Nearest Neighbor",
+          "Distance (km)": 209.31836872977195,
+          "Objective": "distance_km",
+          "Objective score": 209.31836872977195,
+          "Runtime (ms)": 0.09720027446746826,
+          "Improvement vs NN (%)": 0.0,
+          "Optimality gap (%)": null,
+          "Work": 301,
+          "Work metric": "distance comparisons"
+        },
+        {
+          "Algorithm": "2-opt",
+          "Distance (km)": 170.57099922091342,
+          "Objective": "distance_km",
+          "Objective score": 170.57099922091342,
+          "Runtime (ms)": 10.581200011074543,
+          "Improvement vs NN (%)": 18.511213203118842,
+          "Optimality gap (%)": null,
+          "Work": 2208,
+          "Work metric": "candidate reversals"
+        },
+        {
+          "Algorithm": "Simulated Annealing",
+          "Distance (km)": 173.26839243400966,
+          "Objective": "distance_km",
+          "Objective score": 173.26839243400966,
+          "Runtime (ms)": 21.832500118762255,
+          "Improvement vs NN (%)": 17.222557444207144,
+          "Optimality gap (%)": null,
+          "Work": 3000,
+          "Work metric": "neighbor proposals"
+        }
+      ],
+      "annealing_runs": [
+        {
+          "seed": 11,
+          "distance_km": 173.26839243400966,
+          "objective_score": 173.26839243400966,
+          "runtime_ms": 22.618399932980537
+        },
+        {
+          "seed": 22,
+          "distance_km": 183.05525276263032,
+          "objective_score": 183.05525276263032,
+          "runtime_ms": 20.566399674862623
+        },
+        {
+          "seed": 33,
+          "distance_km": 178.86144859017423,
+          "objective_score": 178.86144859017423,
+          "runtime_ms": 21.737299859523773
+        },
+        {
+          "seed": 44,
+          "distance_km": 183.52174389853246,
+          "objective_score": 183.52174389853246,
+          "runtime_ms": 21.428500302135944
+        },
+        {
+          "seed": 55,
+          "distance_km": 185.9123769313916,
+          "objective_score": 185.9123769313916,
+          "runtime_ms": 21.082099992781878
+        }
+      ],
+      "environment": {
+        "generated_at": "2026-10-11T14:37:32.896551+00:00",
+        "python": "3.12.10",
+        "platform": "Windows-11-10.0.26200-SP0",
+        "seed": 11,
+        "sa_iterations": 3000,
+        "brute_force_limit": 8,
+        "exact_optimum_available": false,
+        "objective": "distance_km"
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+Dataset,Algorithm,Distance (km),Objective,Objective score,Runtime (ms),Improvement vs NN (%),Optimality gap (%),Work,Work metric
+Small · Bengaluru (6 stops),Nearest Neighbor,25.357219396200502,distance_km,25.357219396200502,0.03539957106113434,0.0,1.7413428925185246,16,distance comparisons
+Small · Bengaluru (6 stops),2-opt,24.923220664571282,distance_km,24.923220664571282,0.06590038537979126,1.7115391275679466,0.0,20,candidate reversals
+Small · Bengaluru (6 stops),Simulated Annealing,24.923220664571282,distance_km,24.923220664571282,13.565999921411276,1.7115391275679466,0.0,3000,neighbor proposals
+Small · Bengaluru (6 stops),Brute Force,24.923220664571282,distance_km,24.923220664571282,0.225200317800045,1.7115391275679466,0.0,120,permutations evaluated
+Medium · Bengaluru (12 stops),Nearest Neighbor,97.6202911872803,distance_km,97.6202911872803,0.04239985719323158,0.0,,79,distance comparisons
+Medium · Bengaluru (12 stops),2-opt,77.43835391284071,distance_km,77.43835391284071,0.6451001390814781,20.673916282139967,,264,candidate reversals
+Medium · Bengaluru (12 stops),Simulated Annealing,77.43835391284071,distance_km,77.43835391284071,14.162600040435791,20.673916282139967,,3000,neighbor proposals
+Large · Bengaluru (24 stops),Nearest Neighbor,209.31836872977195,distance_km,209.31836872977195,0.09720027446746826,0.0,,301,distance comparisons
+Large · Bengaluru (24 stops),2-opt,170.57099922091342,distance_km,170.57099922091342,10.581200011074543,18.511213203118842,,2208,candidate reversals
+Large · Bengaluru (24 stops),Simulated Annealing,173.26839243400966,distance_km,173.26839243400966,21.832500118762255,17.222557444207144,,3000,neighbor proposals
