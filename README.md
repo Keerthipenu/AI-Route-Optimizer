@@ -1,6 +1,6 @@
 # ROUTEFORGE — AI Delivery Route Optimizer
 
-ROUTEFORGE is an explainable, offline-first delivery route planning laboratory. It accepts a depot and delivery destinations, validates geographic data, builds a Haversine distance matrix, runs four Python-native TSP algorithms, visualizes the resulting route, and produces reproducible comparisons and exports.
+ROUTEFORGE is an explainable, offline-first delivery route planning laboratory. It accepts a depot and delivery destinations, validates geographic data, builds a Haversine distance matrix, runs four Python-native TSP algorithms, visualizes the resulting route on Google Maps or an offline coordinate plot, and produces reproducible comparisons and exports.
 
 The project is designed for a B.Tech AI demonstration without reducing the work to a toy dashboard: algorithms are separately testable, exact and heuristic claims are clearly distinguished, unsafe factorial work is blocked, and every metric shown in the interface comes from an actual run.
 
@@ -14,8 +14,7 @@ An inefficient stop sequence increases total geographic distance and operational
 
 ## Features
 
-- Built-in small, medium, and large Bengaluru datasets.
-- CSV upload plus manual row editing and deletion.
+- Required CSV upload plus manual row editing and deletion; no delivery locations are preloaded.
 - Coordinate, required-field, duplicate-ID, and numeric validation.
 - Round-trip and one-way routes with an optional fixed final destination.
 - Optional OSRM driving-distance, driving-time, and road-geometry routing.
@@ -25,7 +24,8 @@ An inefficient stop sequence increases total geographic distance and operational
 - Distance, fastest-route, and priority-weighted arrival objectives.
 - ETAs that include road/assumed travel time and destination service duration.
 - Nearest Neighbor, guarded Brute Force, 2-opt, and seeded Simulated Annealing.
-- Offline Plotly coordinate map—no tile server, API key, or Internet connection required.
+- Google Maps JavaScript basemap with numbered stops, depot styling, route lines, and tracking markers.
+- Offline Plotly coordinate-map fallback—no tile server, API key, or Internet connection required.
 - Route timeline with explicit depot return, leg distance, and cumulative distance.
 - Exact optimality gap for small instances; no false optimum claims on larger ones.
 - Algorithm decision/convergence histories and student-friendly explanations.
@@ -60,6 +60,17 @@ streamlit run app.py
 
 Open the local URL printed by Streamlit (normally `http://localhost:8501`). Core optimization requires no paid API, account, API key, traffic feed, or map service.
 
+### Enable Google Maps
+
+Enable **Maps JavaScript API** in a Google Cloud project with billing configured, create a browser API key, and restrict it to Maps JavaScript API plus the web referrers that host ROUTEFORGE. Then either:
+
+```powershell
+$env:GOOGLE_MAPS_API_KEY = "your-restricted-browser-key"
+streamlit run app.py
+```
+
+or copy `.streamlit/secrets.toml.example` to `.streamlit/secrets.toml` and replace the placeholder. You can also enter a key in the sidebar for the current Streamlit session. The real secrets file is ignored by Git. Google Maps is a display layer: select **Road network · OSRM** and load its matrix when the optimization itself should use road distance and duration rather than Haversine estimates.
+
 ## CSV schema
 
 ```csv
@@ -72,19 +83,19 @@ BLR-01,Indiranagar,12.9784,77.6408,2,12
 
 ## Typical workflow
 
-1. Choose a sample dataset or upload a CSV.
+1. Upload a delivery CSV; the application validates it before route controls are enabled.
 2. Select the depot and round-trip or one-way mode.
 3. Set the seed, annealing iterations, and exact-search safety limit.
 4. Run one algorithm or compare all applicable methods.
-5. Inspect the offline route map, timeline, measured metrics, and explanation.
-6. Export the selected route or move to the Algorithm Lab and Benchmarks pages.
+5. Inspect the Google Maps or offline route view, timeline, measured metrics, and explanation.
+6. Export the selected route or move to the Algorithm Lab to inspect how each method searched.
 
 ### Using live and road data
 
 1. In **Distance model**, choose **Road network · OSRM** and explicitly load the matrix. A custom OSRM server may be supplied.
 2. Use **Delivery Data → Add a destination from an address** for an explicit, cached geocoding request.
 3. Expand **Live traffic** after optimization and provide a TomTom API key to request current traffic timing. Keys are not persisted.
-4. Open **Live Tracking** and upload telemetry or configure a real HTTP JSON/CSV fleet endpoint.
+4. Open **Live Tracking**, download the telemetry example if needed, and upload telemetry or configure a real HTTP JSON/CSV fleet endpoint.
 
 External integrations are optional. Network errors produce user-facing messages and the offline Haversine workflow remains available. See [integration documentation](docs/integrations.md) for provider limitations and privacy notes.
 

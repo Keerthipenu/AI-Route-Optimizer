@@ -1,14 +1,17 @@
 from __future__ import annotations
 
+from hashlib import sha256
+import os
+
 import streamlit as st
 
-from src.data_loader import SAMPLE_FILES, load_csv, load_sample
+from src.data_loader import load_csv
 from src.distance import build_distance_matrix
 from src.integrations import DEFAULT_OSRM_URL, ProviderError, fetch_osrm_matrix
 from src.models import RouteConstraints
 from src.objectives import RouteObjective
 from src.ui.components import brand
-from src.ui.pages import about_page, algorithm_lab_page, benchmarks_page, delivery_data_page, overview_page, plan_page, tracking_page
+from src.ui.pages import algorithm_lab_page, delivery_data_page, plan_page, tracking_page
 from src.ui.theme import inject_theme
 from src.validation import DataValidationError, frame_to_locations, validate_delivery_frame
 
@@ -17,20 +20,35 @@ inject_theme(st)
 
 with st.sidebar:
     brand(st)
-    page = st.radio("WORKSPACE", ["Plan a Route", "Overview", "Algorithm Lab", "Benchmarks", "Live Tracking", "Delivery Data", "About"], label_visibility="collapsed")
+    page = st.radio("WORKSPACE", ["Plan a Route", "Algorithm Lab", "Live Tracking", "Delivery Data"], label_visibility="collapsed")
     st.divider()
-    dataset_name = st.selectbox("Dataset", list(SAMPLE_FILES), index=1)
-    upload = st.file_uploader("Or upload CSV", type=["csv"])
-    source_key = f"upload:{upload.name}:{upload.size}" if upload is not None else f"sample:{dataset_name}"
+    upload = st.file_uploader("Upload delivery dataset", type=["csv"])
+    st.download_button(
+        "DOWNLOAD CSV TEMPLATE",
+        "location_id,name,latitude,longitude,priority,service_duration\n",
+        "routeforge-template.csv",
+        "text/csv",
+        width="stretch",
+    )
+    st.caption("Upload a CSV to validate its schema and configure a route. No delivery locations are preloaded.")
+
+if upload is None:
+    st.info("Upload a delivery CSV from the sidebar to begin. The application validates the dataset before enabling route planning.")
+    st.stop()
+
+with st.sidebar:
+    upload_bytes = upload.getvalue()
+    source_key = f"upload:{upload.name}:{sha256(upload_bytes).hexdigest()}"
     if st.session_state.get("source_key") != source_key:
         try:
-            st.session_state.delivery_frame = load_csv(upload.getvalue()) if upload is not None else load_sample(dataset_name)
+            st.session_state.delivery_frame = load_csv(upload_bytes)
             st.session_state.source_key = source_key
             st.session_state.pop("report", None)
-            st.session_state.pop("benchmark", None)
         except DataValidationError as exc:
             st.error(str(exc))
-    frame = st.session_state.get("delivery_frame", load_sample(dataset_name))
+            st.session_state.pop("delivery_frame", None)
+            st.stop()
+    frame = st.session_state.delivery_frame
     st.caption(f"{len(frame)} locations · edits are local to this session")
 
 try:
@@ -76,7 +94,7 @@ with st.sidebar:
     road_signature = clean_frame.to_csv(index=False)
     if distance_choice == "Road network · OSRM":
         osrm_url = st.text_input("OSRM server", value=DEFAULT_OSRM_URL)
-        if st.button("LOAD / REFRESH ROAD MATRIX", use_container_width=True):
+        if st.button("LOAD / REFRESH ROAD MATRIX", width="stretch"):
             try:
                 with st.spinner("Requesting road distances and travel times…"):
                     st.session_state.road_matrices = fetch_osrm_matrix(locations, osrm_url)
@@ -85,6 +103,25 @@ with st.sidebar:
                 st.error(str(exc))
         if st.session_state.get("road_matrix_signature") != (road_signature, osrm_url):
             st.caption("Load the matrix to switch from geographic to road-network optimization.")
+    st.markdown("<div class='rf-section'>Map display</div>", unsafe_allow_html=True)
+    map_provider = st.radio(
+        "Map display", ["Google Maps", "Offline coordinate plot"],
+        label_visibility="collapsed",
+    )
+    google_maps_key = os.getenv("GOOGLE_MAPS_API_KEY", "").strip()
+    try:
+        google_maps_key = google_maps_key or str(st.secrets.get("GOOGLE_MAPS_API_KEY", "")).strip()
+    except (FileNotFoundError, KeyError):
+        pass
+    if map_provider == "Google Maps" and not google_maps_key:
+        google_maps_key = st.text_input(
+            "Google Maps API key",
+            type="password",
+            key="google_maps_key",
+            help="Used in this browser session only. Restrict the key to Maps JavaScript API and your website referrers.",
+        ).strip()
+        if not google_maps_key:
+            st.caption("Add a key to activate Google Maps; the offline map remains available.")
 
 objective_mode = {
     "Shortest distance": "distance",
@@ -112,6 +149,7 @@ settings = {
     "assumed_speed_kph": float(assumed_speed_kph), "duration_matrix": duration_matrix,
     "road_mode": road_mode, "osrm_url": osrm_url,
     "distance_source": road_matrices.provider if road_matrices is not None else "Haversine",
+    "map_provider": map_provider, "google_maps_key": google_maps_key,
 }
 configuration_key = (
     clean_frame.to_csv(index=False), depot_index, route_mode, end_index,
@@ -121,17 +159,10 @@ configuration_key = (
 if st.session_state.get("configuration_key") != configuration_key:
     st.session_state.configuration_key = configuration_key
     st.session_state.pop("report", None)
-    st.session_state.pop("benchmark", None)
 
-if page == "Overview":
-    overview_page(locations)
-elif page == "Plan a Route":
-    plan_page(locations, matrix, constraints, settings, "Uploaded CSV" if upload else dataset_name, objective)
+if page == "Plan a Route":
+    plan_page(locations, matrix, constraints, settings, upload.name, objective)
 elif page == "Algorithm Lab":
     algorithm_lab_page(locations, matrix, constraints, settings, objective)
-elif page == "Benchmarks":
-    benchmarks_page(locations, matrix, constraints, settings, objective)
 elif page == "Live Tracking":
-    tracking_page(locations, matrix, constraints)
-elif page == "About":
-    about_page()
+    tracking_page(locations, matrix, constraints, settings)

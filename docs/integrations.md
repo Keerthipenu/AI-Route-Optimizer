@@ -2,6 +2,12 @@
 
 ROUTEFORGE remains offline-first. External calls occur only after an explicit user action, have finite timeouts, produce visible provider labels, and fail back to the local workflow without corrupting route data.
 
+## Google Maps JavaScript API
+
+Select **Google Maps** in the sidebar and provide `GOOGLE_MAPS_API_KEY` through the environment, `.streamlit/secrets.toml`, or the session-only password field. The Plan page renders the selected optimized sequence over Google map tiles with numbered markers. When OSRM road geometry has been loaded, that geometry is drawn instead of straight coordinate-to-coordinate segments. The Live Tracking page uses the same map for the latest received vehicle markers.
+
+The browser loads the Maps JavaScript API directly, so the browser key is visible by design. Restrict it in Google Cloud to the Maps JavaScript API and the expected website referrers, configure billing/quota alerts, and never commit it. Google Maps provides the basemap here; it does not silently change the optimizer's matrix or claim live navigation. If the key or network is unavailable, select the offline coordinate plot.
+
 ## OSRM road routing
 
 Select **Road network · OSRM** and press **Load / refresh road matrix**. ROUTEFORGE calls the OSRM table service for driving distance and duration matrices, then passes the returned distance matrix through the same tested algorithms. The selected route can also request OSRM GeoJSON geometry for a road-shaped plot.
